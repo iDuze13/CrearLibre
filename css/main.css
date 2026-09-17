@@ -1,0 +1,412 @@
+/* =========================================================================
+   CrearLibre — main.css
+   Tokens de diseño (colores, tipografía, espaciado, sombras), reset base
+   y estilos de botones. Sin dependencias externas: la tipografía cae a una
+   pila de fuentes del sistema con peso alto para imitar el efecto redondo
+   y amigable de Nunito Sans sin necesitar descargarla.
+   ========================================================================= */
+
+:root {
+  /* --- Color: paleta clara, alto contraste, inspirada en Material 3 --- */
+  --color-superficie: #f7f9fc;
+  --color-superficie-minima: #ffffff;
+  --color-superficie-baja: #f2f4f7;
+  --color-superficie-contenedor: #eceef1;
+  --color-superficie-alta: #e6e8eb;
+  --color-superficie-maxima: #e0e3e6;
+  --color-borde-suave: #c4c6cf;
+
+  --color-texto: #191c1e;
+  --color-texto-suave: #44474e;
+
+  --color-primario: #031f41;
+  --color-primario-contenedor: #1d3557;
+  --color-sobre-primario: #ffffff;
+
+  --color-secundario: #006a60;
+  --color-secundario-contenedor: #8cf5e4;
+  --color-sobre-secundario: #ffffff;
+  --color-sobre-secundario-contenedor: #00201c;
+
+  --color-terciario: #cd9200;
+  --color-terciario-contenedor: #ffdea9;
+
+  --color-error: #ba1a1a;
+  --color-error-contenedor: #ffdad6;
+  --color-sobre-error-contenedor: #93000a;
+
+  /* --- Radios, sombras y espaciado --- */
+  --radio-chico: 0.75rem;
+  --radio-medio: 1rem;
+  --radio-grande: 1.5rem;
+  --radio-completo: 9999px;
+
+  --sombra-pill: 0 4px 0 rgba(0, 0, 0, 0.18);
+  --sombra-pill-chica: 0 3px 0 rgba(0, 0, 0, 0.18);
+  --sombra-suave: 0 2px 8px rgba(3, 31, 65, 0.08);
+  --sombra-flotante: 0 12px 32px rgba(3, 31, 65, 0.22);
+
+  --espacio-xs: 0.5rem;
+  --espacio-sm: 0.75rem;
+  --espacio-md: 1rem;
+  --espacio-lg: 1.5rem;
+  --espacio-xl: 2.25rem;
+
+  /* --- Tipografía ---
+     Nunito Sans no puede descargarse offline: si en algún momento se
+     agregan sus archivos .woff2 en assets/fonts/, alcanza con sumar acá
+     un @font-face y anteponer "Nunito Sans" a esta pila. Mientras tanto,
+     usamos fuentes del sistema con peso muy alto para imitar el mismo
+     efecto redondo y amigable. */
+  --fuente-app: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* --- Reset base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body.cuerpo-app {
+  font-family: var(--fuente-app);
+  font-weight: 700;
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  -webkit-font-smoothing: antialiased;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+svg.icono-svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Ocultar la barra de scroll mientras se mantiene el desplazamiento
+   (más calmo visualmente; el desplazamiento sigue siendo posible). */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* --- Utilidades --- */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.oculto {
+  display: none !important;
+}
+
+/* =========================================================================
+   Botones — familia "pill": bloque de color sólido con un pequeño
+   "escalón" de sombra que desaparece al presionar, dando la sensación
+   física de un botón real sin depender de animaciones costosas.
+   ========================================================================= */
+
+.boton-herramienta-grande,
+.boton-primario-grande,
+.boton-secundario-grande,
+.boton-peligro-grande,
+.boton-peligro-ancho,
+.boton-secundario-ancho,
+.boton-nav-seccion,
+.boton-modo-adulto,
+.boton-icono-circular,
+.boton-grosor,
+.boton-texto-chico,
+.tarjeta-plantilla-grande,
+.boton-flecha,
+.color-dot,
+.sello-btn {
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.boton-herramienta-grande:active,
+.boton-primario-grande:active,
+.boton-secundario-grande:active,
+.boton-peligro-grande:active,
+.boton-peligro-ancho:active,
+.boton-secundario-ancho:active,
+.boton-nav-seccion:active,
+.boton-modo-adulto:active,
+.boton-icono-circular:active,
+.boton-grosor:active,
+.boton-texto-chico:active,
+.tarjeta-plantilla-grande:active,
+.boton-flecha:active {
+  transform: translateY(3px);
+  box-shadow: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton-herramienta-grande, .boton-primario-grande, .boton-secundario-grande,
+  .boton-peligro-grande, .boton-peligro-ancho, .boton-secundario-ancho,
+  .boton-nav-seccion, .boton-modo-adulto, .boton-icono-circular, .boton-grosor,
+  .boton-texto-chico, .tarjeta-plantilla-grande, .boton-flecha, .color-dot, .sello-btn {
+    transition: none !important;
+  }
+}
+
+/* --- Botón "herramienta" genérico (Pincel, Sellos, Deshacer, Bajar...) --- */
+.boton-herramienta-grande {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 5rem;
+  height: 4rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-superficie-baja);
+  color: var(--color-texto);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: var(--sombra-pill-chica);
+}
+.boton-herramienta-grande[aria-pressed="true"] {
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+}
+.boton-herramienta-grande svg { color: var(--color-primario); }
+.boton-herramienta-grande[aria-pressed="true"] svg { color: var(--color-sobre-primario); }
+.boton-herramienta-grande:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* --- Botón primario (Guardar) --- */
+.boton-primario-grande {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 5rem;
+  height: 4rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-secundario);
+  color: var(--color-sobre-secundario);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: var(--sombra-pill-chica);
+}
+
+/* --- Botón secundario (Pantalla completa, Goma...) --- */
+.boton-secundario-grande {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3.5rem;
+  padding: 0 1.25rem;
+  border-radius: var(--radio-completo);
+  background: var(--color-secundario-contenedor);
+  color: var(--color-sobre-secundario-contenedor);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: var(--sombra-pill);
+  white-space: nowrap;
+}
+
+/* --- Botón de icono circular (silenciar rápido) --- */
+.boton-icono-circular {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--color-secundario-contenedor);
+  color: var(--color-sobre-secundario-contenedor);
+  box-shadow: var(--sombra-pill);
+}
+
+/* --- Botón peligroso (Borrar, Vaciar galería) --- */
+.boton-peligro-grande {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-error-contenedor);
+  color: var(--color-sobre-error-contenedor);
+  box-shadow: var(--sombra-pill-chica);
+}
+.boton-peligro-grande svg { color: var(--color-error); }
+.boton-peligro-grande > span:not(.pista-barra-hold) { position: relative; z-index: 1; }
+.boton-peligro-grande .pista-hold {
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.boton-peligro-ancho {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-error-contenedor);
+  color: var(--color-sobre-error-contenedor);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.boton-peligro-ancho span:not(.pista-barra-hold) { position: relative; z-index: 1; }
+.boton-peligro-ancho svg { position: relative; z-index: 1; }
+
+.boton-secundario-ancho {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-superficie-alta);
+  color: var(--color-texto);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+/* --- Barra de progreso de "mantener presionado" ---
+   Estos son <span>, que por defecto son "inline": hay que forzarlos a
+   "block" (o "flex") para que el navegador respete width/height; si no,
+   el relleno nunca se ve crecer aunque el JS actualice el ancho bien. */
+
+/* Variante "chica": una tira fina de 4px debajo del texto del botón
+   (Borrar todo). */
+.pista-barra-hold {
+  display: block;
+  position: static;
+  width: 100%;
+  height: 4px;
+  margin-top: 0.25rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(186, 26, 26, 0.2);
+}
+.pista-barra-hold .pista-barra-hold-relleno {
+  display: block;
+  position: relative;
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-error);
+  transition: width 0.05s linear;
+}
+
+/* Variante "ancha": ocupa todo el botón de fondo, detrás del texto
+   (Vaciar galería). */
+.pista-barra-hold-ancha {
+  display: block;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border-radius: var(--radio-medio);
+  overflow: hidden;
+  pointer-events: none;
+}
+.pista-barra-hold-ancha .pista-barra-hold-relleno {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  height: auto;
+  border-radius: 0;
+  background: rgba(186, 26, 26, 0.3);
+  transition: width 0.05s linear;
+}
+
+/* Alias que usa adult-panel.js para el botón "Modo Acompañante"
+   (círculo de progreso en el header, ver .barra-progreso-circular). */
+.barra-progreso-hold {
+  display: block;
+}
+
+.barra-progreso-circular {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.28);
+  width: 0%;
+  transition: width 0.05s linear;
+}
+
+/* --- Botón de texto chico (Nuevo dibujo) --- */
+.boton-texto-chico {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: var(--radio-chico);
+  background: var(--color-superficie-minima);
+  color: var(--color-primario);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: var(--sombra-suave);
+}
+
+/* --- Flechas de navegación de tiras horizontales --- */
+.boton-flecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-superficie-baja);
+  color: var(--color-texto);
+  flex-shrink: 0;
+}

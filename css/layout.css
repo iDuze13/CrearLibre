@@ -1,0 +1,617 @@
+/* =========================================================================
+   CrearLibre — layout.css
+   Estructura de la pantalla: encabezado fijo, nav lateral de secciones,
+   los tres paneles (Pintar / Formas / Dibujos), la tira inferior de
+   paleta y creaciones, y el cajón del acompañante.
+   ========================================================================= */
+
+/* --- Encabezado --- */
+.encabezado-app {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 30;
+  height: 5rem;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 4px solid var(--color-superficie-alta);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  gap: 1rem;
+}
+
+.boton-modo-adulto {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.5rem;
+  padding: 0 1.25rem 0 0.75rem;
+  border-radius: var(--radio-completo);
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+  box-shadow: var(--sombra-pill);
+}
+.boton-modo-adulto svg { position: relative; z-index: 1; }
+.texto-boton-modo-adulto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+.texto-boton-modo-adulto span { font-size: 0.75rem; text-transform: uppercase; }
+.texto-boton-modo-adulto small { font-size: 0.625rem; font-weight: 700; opacity: 0.8; }
+
+.titulo-encabezado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.titulo-app {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-primario);
+}
+.subtitulo-app {
+  font-size: 0.6875rem;
+  color: var(--color-secundario);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.acciones-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* --- Cuerpo: nav lateral + contenido --- */
+.cuerpo-principal {
+  position: fixed;
+  top: 5rem; left: 0; right: 0; bottom: 0;
+  display: flex;
+}
+
+.nav-secciones {
+  width: 6rem;
+  flex-shrink: 0;
+  background: var(--color-superficie-baja);
+  border-right: 4px solid var(--color-superficie-alta);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.5rem;
+}
+
+.boton-nav-seccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radio-grande);
+  background: var(--color-superficie-minima);
+  color: var(--color-texto-suave);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: var(--sombra-pill-chica);
+}
+.boton-nav-seccion[aria-selected="true"] {
+  background: var(--color-primario-contenedor);
+  color: var(--color-sobre-primario);
+  box-shadow: var(--sombra-pill);
+}
+
+#contenido-principal {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.panel-seccion {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- Panel Pintar --- */
+#panel-pintar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.fila-trabajo {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.barra-herramientas-lateral,
+.barra-acciones-lateral {
+  width: 6rem;
+  flex-shrink: 0;
+  background: var(--color-superficie-minima);
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-suave);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+.grupo-herramientas-modo,
+.grupo-grosores {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.separador-tactil {
+  width: 3.5rem;
+  height: 2px;
+  background: var(--color-superficie-maxima);
+  border-radius: 999px;
+  margin: 0.5rem 0;
+}
+
+.boton-grosor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-superficie-baja);
+  color: var(--color-texto);
+}
+.boton-grosor[aria-checked="true"],
+.boton-grosor-activo {
+  background: var(--color-primario-contenedor);
+  color: var(--color-sobre-primario);
+  box-shadow: var(--sombra-pill-chica);
+}
+.muestra-grosor {
+  border-radius: 50%;
+  background: currentColor;
+  display: block;
+}
+.muestra-grosor-grueso { width: 1.5rem; height: 1.5rem; }
+.muestra-grosor-medio { width: 0.875rem; height: 0.875rem; }
+.muestra-grosor-fino { width: 0.375rem; height: 0.375rem; }
+.boton-grosor span:last-child {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  margin-top: 0.125rem;
+}
+
+/* --- Lienzo --- */
+.zona-lienzo {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-superficie-minima);
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-flotante);
+  position: relative;
+  overflow: hidden;
+}
+
+.contenedor-lienzo {
+  position: absolute;
+  inset: 0.75rem;
+}
+
+.capa-lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* por defecto ninguna capa "atrapa" el puntero */
+}
+.capa-interactiva {
+  pointer-events: auto; /* solo el lienzo de dibujo recibe clics/touch */
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.indicador-estado-lienzo {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(236, 238, 241, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--color-texto-suave);
+  pointer-events: none;
+}
+.punto-indicador {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-secundario);
+}
+
+/* --- Tira inferior: paleta y creaciones --- */
+.barra-inferior {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fila-paleta,
+.fila-creaciones {
+  width: 100%;
+  background: var(--color-superficie-minima);
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-suave);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.etiqueta-fila {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--color-texto-suave);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.grupo-colores,
+.grupo-sellos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+}
+
+.color-dot {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--color-boton, #ccc);
+  box-shadow: var(--sombra-suave);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.color-dot-activo,
+.color-dot[aria-checked="true"] {
+  box-shadow: 0 0 0 4px var(--color-superficie-minima), 0 0 0 7px var(--color-primario);
+  transform: scale(1.08);
+}
+.icono-check-color { color: #fff; width: 1.125rem; height: 1.125rem; }
+
+.separador-colores {
+  width: 1px;
+  height: 2rem;
+  background: var(--color-superficie-maxima);
+  flex-shrink: 0;
+  margin: 0 0.25rem;
+}
+
+.sello-btn {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--color-sello, #eee);
+  box-shadow: var(--sombra-suave);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+.sello-activo,
+.sello-btn[aria-checked="true"] {
+  box-shadow: 0 0 0 4px var(--color-superficie-minima), 0 0 0 7px var(--color-primario);
+  transform: scale(1.08);
+}
+
+.tira-miniaturas {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+.miniatura-tira-item {
+  width: 4.5rem;
+  height: 2.75rem;
+  border-radius: var(--radio-chico);
+  overflow: hidden;
+  background: var(--color-superficie-baja);
+  flex-shrink: 0;
+  box-shadow: var(--sombra-suave);
+}
+.miniatura-tira-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Panel Formas --- */
+#panel-formas {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+.cabecera-panel-seccion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.titulo-panel-seccion {
+  flex: 1;
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--color-primario);
+}
+.flechas-panel-seccion {
+  display: flex;
+  gap: 0.5rem;
+}
+.tira-plantillas {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0 0 0.75rem;
+  margin: 0;
+  list-style: none;
+}
+.tira-plantillas li { flex-shrink: 0; }
+.tarjeta-plantilla-grande {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: var(--radio-grande);
+  background: var(--color-superficie-minima);
+  box-shadow: var(--sombra-suave);
+  font-size: 1rem;
+  font-weight: 800;
+}
+.tarjeta-plantilla-grande[aria-pressed="true"] {
+  box-shadow: 0 0 0 4px var(--color-primario);
+}
+.emoji-plantilla { font-size: 2.25rem; }
+
+/* --- Modo interfaz simplificada: oculta sellos, la pestaña Formas y
+   reduce la paleta a 3 colores básicos (ver adult-panel.js) --- */
+body.modo-simple #tool-stamp,
+body.modo-simple #nav-formas,
+body.modo-simple .color-dot-extra {
+  display: none !important;
+}
+
+/* --- Panel Dibujos --- */
+#panel-dibujos {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+.texto-galeria-vacia {
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
+.cuadricula-galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.item-galeria {
+  position: relative;
+}
+.boton-item-galeria {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radio-medio);
+  overflow: hidden;
+  background: var(--color-superficie-minima);
+  box-shadow: var(--sombra-suave);
+}
+.miniatura-galeria {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.fecha-galeria { display: none; }
+.boton-borrar-item-galeria {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-error);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sombra-suave);
+}
+.boton-borrar-item-galeria svg { width: 1.125rem; height: 1.125rem; }
+
+/* --- Cajón del acompañante --- */
+.fondo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 40;
+}
+
+.cajon-acompanante {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 24rem;
+  max-width: 90vw;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: var(--color-superficie-minima);
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-flotante);
+  padding: 1.25rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cabecera-cajon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-superficie-alta);
+}
+.titulo-cajon-grupo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.icono-titulo-cajon { color: var(--color-primario); width: 1.75rem; height: 1.75rem; }
+.titulo-cajon-grupo h2 {
+  font-size: 1.125rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--color-primario);
+  line-height: 1.2;
+}
+.titulo-cajon-grupo p {
+  font-size: 0.6875rem;
+  color: var(--color-texto-suave);
+  font-weight: 700;
+}
+.boton-cerrar-cajon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-superficie-alta);
+  color: var(--color-texto);
+}
+
+.cuerpo-cajon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fila-interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--radio-medio);
+  background: var(--color-superficie-baja);
+}
+.texto-interruptor {
+  display: flex;
+  flex-direction: column;
+}
+.texto-interruptor > span {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.texto-interruptor > small {
+  font-size: 0.6875rem;
+  color: var(--color-texto-suave);
+  font-weight: 500;
+}
+.fila-interruptor input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--color-secundario);
+  flex-shrink: 0;
+}
+
+.separador-opciones {
+  border: none;
+  border-top: 2px solid var(--color-superficie-alta);
+  margin: 0;
+}
+
+.texto-ayuda-acompanante {
+  font-size: 0.6875rem;
+  color: var(--color-texto-suave);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* --- Toast de confirmación --- */
+.toast-guardado {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  box-shadow: var(--sombra-flotante);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  transform: translate(-50%, -6rem);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.toast-guardado.toast-visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-guardado { transition: none; }
+}

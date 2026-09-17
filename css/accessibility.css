@@ -1,0 +1,125 @@
+/* =========================================================================
+   CrearLibre — accessibility.css
+   Todo lo que hace que la app sea operable con teclado, pulsadores
+   adaptados y lectores de pantalla: foco de alto contraste, salto de
+   contenido, tamaños táctiles mínimos y respeto por "reducir movimiento".
+   ========================================================================= */
+
+/* --- Enlace para saltar directo al lienzo (útil con teclado/switch) --- */
+.enlace-salto {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  background: var(--color-primario);
+  color: var(--color-sobre-primario);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radio-medio);
+  font-weight: 800;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.enlace-salto:focus {
+  top: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .enlace-salto { transition: none; }
+}
+
+/* --- Foco visible de alto contraste ---
+   Se aplica a cualquier control interactivo: botones, radios, checkboxes,
+   y al propio lienzo (navegable con Tab y dibujable con flechas). El
+   grosor y el offset están pensados para verse bien incluso con
+   pantallas pequeñas o vistas desde cierta distancia. */
+button:focus-visible,
+[role="radio"]:focus-visible,
+[role="tab"]:focus-visible,
+input[type="checkbox"]:focus-visible,
+a:focus-visible,
+#lienzo-principal:focus-visible {
+  outline: 4px solid var(--color-primario);
+  outline-offset: 3px;
+  border-radius: var(--radio-chico);
+}
+
+/* Los círculos de color necesitan un offset mayor para que el foco no
+   quede "pegado" al borde curvo del botón. */
+.color-dot:focus-visible,
+.sello-btn:focus-visible {
+  outline-offset: 4px;
+}
+
+/* --- Tamaños táctiles mínimos (WCAG 2.1 AA: 44x44px reales; acá vamos
+   más grandes a propósito, 72px+, pensando en motricidad reducida) --- */
+.boton-herramienta-grande,
+.boton-primario-grande,
+.boton-peligro-grande,
+.boton-nav-seccion,
+.boton-grosor,
+.tarjeta-plantilla-grande {
+  min-width: 4.5rem;
+  min-height: 4.5rem;
+}
+.color-dot,
+.sello-btn,
+.boton-icono-circular,
+.boton-flecha {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+
+/* --- Prevención de gestos no deseados sobre el lienzo --- */
+#lienzo-principal,
+#capa-fondo,
+#capa-plantilla {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.zona-lienzo {
+  -webkit-touch-callout: none;
+}
+
+/* --- Reducción de movimiento: respetamos la preferencia del sistema
+   operativo apagando toda transición y animación no esencial --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Alto contraste de sistema (Windows High Contrast / forced-colors):
+   nos aseguramos de que los botones sigan teniendo un borde visible
+   incluso cuando el navegador reemplaza los colores de fondo. --- */
+@media (forced-colors: active) {
+  .boton-herramienta-grande,
+  .boton-primario-grande,
+  .boton-secundario-grande,
+  .boton-peligro-grande,
+  .boton-peligro-ancho,
+  .boton-secundario-ancho,
+  .boton-nav-seccion,
+  .boton-modo-adulto,
+  .color-dot,
+  .sello-btn,
+  .tarjeta-plantilla-grande {
+    border: 2px solid ButtonText;
+  }
+}
+
+/* --- Estados de "pulsado" con retroalimentación adicional para quienes
+   no perciben bien el cambio de color (además del cambio de fondo) --- */
+.boton-herramienta-grande[aria-pressed="true"],
+.boton-nav-seccion[aria-selected="true"],
+.boton-grosor[aria-checked="true"] {
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5), var(--sombra-pill-chica);
+}
+
+/* --- Aseguramos que el contenido oculto por atributo nunca reciba foco
+   ni sea leído por el lector de pantalla, incluso si algún estilo
+   externo llegara a sobreescribir "display" --- */
+[hidden] {
+  display: none !important;
+}

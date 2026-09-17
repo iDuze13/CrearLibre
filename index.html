@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#031f41">
+<meta name="color-scheme" content="light">
+<meta name="description" content="CrearLibre: aplicación de dibujo accesible para niños y jóvenes con TEA, síndrome de Down y movilidad reducida.">
+<title>CrearLibre — Dibujá libre</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/accessibility.css">
+</head>
+<body class="cuerpo-app">
+
+<a class="enlace-salto" href="#lienzo-principal">Ir directo al lienzo de dibujo</a>
+
+<div id="anunciador-estado" class="visualmente-oculto" role="status" aria-live="polite"></div>
+<div id="anunciador-alerta" class="visualmente-oculto" role="alert" aria-live="assertive"></div>
+
+<!-- Sprite de íconos SVG compartido: reemplaza a Material Symbols para que la app funcione 100% offline -->
+<svg class="visualmente-oculto" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="icono-ajustes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></symbol>
+    <symbol id="icono-pintar" viewBox="0 0 24 24"><path d="M15 4l5 5-9.5 9.5a2 2 0 01-1 .55L4 20l1-5.5a2 2 0 01.55-1z"></path></symbol>
+    <symbol id="icono-formas" viewBox="0 0 24 24"><circle cx="7" cy="7" r="4"></circle><rect x="13" y="3" width="8" height="8" rx="1"></rect><path d="M13 21l4-7 4 7z"></path></symbol>
+    <symbol id="icono-galeria" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="9.5" r="1.5"></circle><path d="M21 15l-5-5-4 4-3-3-6 6"></path></symbol>
+    <symbol id="icono-volumen" viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"></path><path d="M15.5 8.5a5 5 0 010 7"></path><path d="M18 6a9 9 0 010 12"></path></symbol>
+    <symbol id="icono-volumen-apagado" viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"></path><path d="M23 9l-6 6"></path><path d="M17 9l6 6"></path></symbol>
+    <symbol id="icono-pantalla-completa" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3"></path><path d="M16 3h3a2 2 0 012 2v3"></path><path d="M3 16v3a2 2 0 002 2h3"></path><path d="M16 21h3a2 2 0 002-2v-3"></path></symbol>
+    <symbol id="icono-pantalla-completa-salir" viewBox="0 0 24 24"><path d="M9 3v3a2 2 0 01-2 2H4"></path><path d="M15 3v3a2 2 0 002 2h3"></path><path d="M4 16h3a2 2 0 012 2v3"></path><path d="M20 16h-3a2 2 0 00-2 2v3"></path></symbol>
+    <symbol id="icono-sello" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="8" rx="1"></rect><path d="M9 10V7a3 3 0 016 0v3"></path><circle cx="12" cy="14" r="1.6"></circle></symbol>
+    <symbol id="icono-paleta" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.5-.7-.5-1.2 0-.9.7-1.4 1.6-1.4H16a4 4 0 004-4c0-5.5-4.9-10-8-10z"></path><circle cx="7.5" cy="11.5" r="1.3"></circle><circle cx="10.5" cy="7.5" r="1.3"></circle><circle cx="15" cy="8" r="1.3"></circle></symbol>
+    <symbol id="icono-goma" viewBox="0 0 24 24"><path d="M4 16l8-8 6 6-6 6H8z"></path><path d="M8 20h11"></path></symbol>
+    <symbol id="icono-deshacer" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 010 11H11"></path></symbol>
+    <symbol id="icono-rehacer" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"></path><path d="M20 9H9.5A5.5 5.5 0 004 14.5v0A5.5 5.5 0 009.5 20H13"></path></symbol>
+    <symbol id="icono-borrar" viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"></path><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path></symbol>
+    <symbol id="icono-camara" viewBox="0 0 24 24"><path d="M4 8h3l2-2h6l2 2h3v11H4z"></path><circle cx="12" cy="13.5" r="3.5"></circle></symbol>
+    <symbol id="icono-descargar" viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></symbol>
+    <symbol id="icono-escudo" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.9-8 9-4.8-1.1-8-4.5-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></symbol>
+    <symbol id="icono-cerrar" viewBox="0 0 24 24"><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path></symbol>
+    <symbol id="icono-microfono" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v4"></path><path d="M8 22h8"></path></symbol>
+    <symbol id="icono-carpeta-borrar" viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><path d="M9.5 14.5l5-5"></path><path d="M14.5 14.5l-5-5"></path></symbol>
+    <symbol id="icono-check-circulo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></symbol>
+    <symbol id="icono-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 7"></path></symbol>
+    <symbol id="icono-agregar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></symbol>
+    <symbol id="icono-libro" viewBox="0 0 24 24"><path d="M4 5c2-1 5-1 8 0v14c-3-1-6-1-8 0z"></path><path d="M20 5c-2-1-5-1-8 0v14c3-1 6-1 8 0z"></path></symbol>
+    <symbol id="icono-flecha-izq" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></symbol>
+    <symbol id="icono-flecha-der" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></symbol>
+  </defs>
+</svg>
+
+<header class="encabezado-app">
+  <button
+    type="button"
+    id="btn-ajustes"
+    class="boton-modo-adulto"
+    aria-label="Panel del acompañante. Mantené presionado tres segundos para abrir."
+    data-hold-ms="3000">
+    <span class="barra-progreso-hold barra-progreso-circular" id="progreso-ajustes" aria-hidden="true"></span>
+    <svg class="icono-svg" aria-hidden="true"><use href="#icono-ajustes"></use></svg>
+    <span class="texto-boton-modo-adulto">
+      <span>Modo Acompañante</span>
+      <small>Mantener 3s</small>
+    </span>
+  </button>
+
+  <div class="titulo-encabezado">
+    <div class="titulo-app">
+      <span>CrearLibre</span>
+      <span aria-hidden="true">🎨</span>
+    </div>
+    <span class="subtitulo-app">Espacio sensorial seguro</span>
+  </div>
+
+  <div class="acciones-encabezado">
+    <button type="button" id="btn-pantalla-completa" class="boton-secundario-grande" aria-pressed="false">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-pantalla-completa"></use></svg>
+      <span>Pantalla completa</span>
+    </button>
+    <button type="button" id="btn-silenciar-rapido" class="boton-icono-circular" aria-pressed="false" aria-label="Silenciar sonidos">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-volumen"></use></svg>
+    </button>
+  </div>
+</header>
+
+<div class="cuerpo-principal">
+
+  <nav class="nav-secciones" aria-label="Secciones de la aplicación" role="tablist" aria-orientation="vertical">
+    <button type="button" id="nav-pintar" class="boton-nav-seccion" role="tab" aria-selected="true" aria-controls="panel-pintar">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-pintar"></use></svg>
+      <span>Pintar</span>
+    </button>
+    <button type="button" id="nav-formas" class="boton-nav-seccion" role="tab" aria-selected="false" aria-controls="panel-formas" tabindex="-1">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-formas"></use></svg>
+      <span>Formas</span>
+    </button>
+    <button type="button" id="nav-dibujos" class="boton-nav-seccion" role="tab" aria-selected="false" aria-controls="panel-dibujos" tabindex="-1">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-galeria"></use></svg>
+      <span>Dibujos</span>
+    </button>
+  </nav>
+
+  <main id="contenido-principal">
+
+    <!-- PANEL 1: PINTAR -->
+    <section id="panel-pintar" class="panel-seccion" role="tabpanel" aria-labelledby="nav-pintar">
+      <div class="fila-trabajo">
+
+        <aside class="barra-herramientas-lateral" aria-label="Herramientas de dibujo">
+          <div class="grupo-herramientas-modo" role="group" aria-label="Modo de dibujo">
+            <button type="button" id="tool-brush" class="boton-herramienta-grande" aria-pressed="true">
+              <svg class="icono-svg" aria-hidden="true"><use href="#icono-pintar"></use></svg>
+              <span>Pincel</span>
+            </button>
+            <button type="button" id="tool-stamp" class="boton-herramienta-grande" aria-pressed="false">
+              <svg class="icono-svg" aria-hidden="true"><use href="#icono-sello"></use></svg>
+              <span>Sellos</span>
+            </button>
+          </div>
+
+          <div class="separador-tactil" role="separator"></div>
+
+          <div class="grupo-grosores" role="radiogroup" aria-label="Grosor del trazo">
+            <button type="button" class="boton-grosor" id="stroke-thick" role="radio" aria-checked="false" data-grosor="20">
+              <span class="muestra-grosor muestra-grosor-grueso" aria-hidden="true"></span>
+              <span>Grueso</span>
+            </button>
+            <button type="button" class="boton-grosor boton-grosor-activo" id="stroke-mid" role="radio" aria-checked="true" data-grosor="10">
+              <span class="muestra-grosor muestra-grosor-medio" aria-hidden="true"></span>
+              <span>Medio</span>
+            </button>
+            <button type="button" class="boton-grosor" id="stroke-thin" role="radio" aria-checked="false" data-grosor="4">
+              <span class="muestra-grosor muestra-grosor-fino" aria-hidden="true"></span>
+              <span>Fino</span>
+            </button>
+          </div>
+        </aside>
+
+        <div class="zona-lienzo" aria-label="Área de dibujo">
+          <div class="contenedor-lienzo" id="contenedor-lienzo">
+            <canvas id="capa-fondo" class="capa-lienzo" aria-hidden="true"></canvas>
+            <canvas
+              id="lienzo-principal"
+              class="capa-lienzo capa-interactiva"
+              tabindex="0"
+              role="img"
+              aria-label="Lienzo de dibujo. Tocá, hacé clic o usá las flechas del teclado para dibujar.">
+            </canvas>
+            <canvas id="capa-plantilla" class="capa-lienzo" aria-hidden="true"></canvas>
+          </div>
+          <p class="indicador-estado-lienzo" aria-hidden="true">
+            <span class="punto-indicador"></span>
+            Lienzo protegido activo
+          </p>
+        </div>
+
+        <aside class="barra-acciones-lateral" aria-label="Acciones sobre el dibujo">
+          <button type="button" id="btn-undo" class="boton-herramienta-grande" disabled>
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-deshacer"></use></svg>
+            <span>Deshacer</span>
+          </button>
+
+          <button type="button" id="btn-redo" class="boton-herramienta-grande" disabled>
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-rehacer"></use></svg>
+            <span>Rehacer</span>
+          </button>
+
+          <button
+            type="button"
+            id="btn-clear"
+            class="boton-peligro-grande"
+            data-hold-ms="2000"
+            aria-label="Borrar todo el dibujo. Mantené presionado dos segundos.">
+            <span class="pista-barra-hold pista-barra-hold-ancha" aria-hidden="true">
+              <span class="pista-barra-hold-relleno" id="clear-progress"></span>
+            </span>
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-borrar"></use></svg>
+            <span>Borrar</span>
+            <span class="pista-hold">Sostener 2s</span>
+          </button>
+
+          <button type="button" id="btn-save" class="boton-primario-grande">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-camara"></use></svg>
+            <span>Guardar</span>
+          </button>
+
+          <button type="button" id="btn-download" class="boton-herramienta-grande">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-descargar"></use></svg>
+            <span>Bajar</span>
+          </button>
+        </aside>
+      </div>
+
+      <footer class="barra-inferior">
+        <div class="fila-paleta">
+          <span class="etiqueta-fila" aria-hidden="true">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-paleta"></use></svg>
+          </span>
+
+          <button type="button" id="flecha-paleta-izq" class="boton-flecha" aria-label="Ver opciones anteriores">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-flecha-izq"></use></svg>
+          </button>
+
+          <div class="grupo-colores" role="radiogroup" aria-label="Elegir color de pincel" id="grupo-colores">
+            <button type="button" class="color-dot" role="radio" aria-checked="false" data-color="#ba1a1a" aria-label="Rojo" style="--color-boton:#ba1a1a"></button>
+            <button type="button" class="color-dot color-dot-activo" role="radio" aria-checked="true" data-color="#031f41" aria-label="Azul" style="--color-boton:#031f41">
+              <svg class="icono-svg icono-check-color" aria-hidden="true"><use href="#icono-check"></use></svg>
+            </button>
+            <button type="button" class="color-dot" role="radio" aria-checked="false" data-color="#ffba27" aria-label="Amarillo" style="--color-boton:#ffba27"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#006a60" aria-label="Verde" style="--color-boton:#006a60"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#cd9200" aria-label="Naranja" style="--color-boton:#cd9200"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#485f84" aria-label="Violeta" style="--color-boton:#485f84"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#473000" aria-label="Marrón" style="--color-boton:#473000"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#191c1e" aria-label="Negro" style="--color-boton:#191c1e"></button>
+            <span class="separador-colores" aria-hidden="true"></span>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#FF9EC4" aria-label="Rosado pastel" style="--color-boton:#FF9EC4"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#7FD1F5" aria-label="Celeste pastel" style="--color-boton:#7FD1F5"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#C9A6F2" aria-label="Violeta pastel" style="--color-boton:#C9A6F2"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#FFE066" aria-label="Amarillo pastel" style="--color-boton:#FFE066"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#A8E6A3" aria-label="Verde pastel" style="--color-boton:#A8E6A3"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#FFB067" aria-label="Naranja pastel" style="--color-boton:#FFB067"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#8AA9E0" aria-label="Azul pastel" style="--color-boton:#8AA9E0"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#7FE0D0" aria-label="Verde agua pastel" style="--color-boton:#7FE0D0"></button>
+            <button type="button" class="color-dot color-dot-extra" role="radio" aria-checked="false" data-color="#FF8A80" aria-label="Rojo pastel" style="--color-boton:#FF8A80"></button>
+          </div>
+
+          <div class="grupo-sellos oculto" role="radiogroup" aria-label="Elegir sello" id="grupo-sellos" hidden>
+            <button type="button" class="sello-btn sello-activo" role="radio" aria-checked="true" data-sello="⭐" aria-label="Sello de estrella" style="--color-sello:#fff3cd">⭐</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="☀️" aria-label="Sello de solcito" style="--color-sello:#ffe3cc">☀️</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🦋" aria-label="Sello de mariposa" style="--color-sello:#ecdcff">🦋</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="❤️" aria-label="Sello de corazón" style="--color-sello:#ffd9d6">❤️</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="😊" aria-label="Sello de carita sonriente" style="--color-sello:#d3f5ee">😊</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🌸" aria-label="Sello de flor" style="--color-sello:#ffe0f0">🌸</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🐶" aria-label="Sello de perrito" style="--color-sello:#f5e6d3">🐶</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🐰" aria-label="Sello de conejito" style="--color-sello:#f0e6ff">🐰</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🐢" aria-label="Sello de tortuga" style="--color-sello:#e0f5d8">🐢</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🐬" aria-label="Sello de delfín" style="--color-sello:#dbf1ff">🐬</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🦄" aria-label="Sello de unicornio" style="--color-sello:#ffe0f5">🦄</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🍀" aria-label="Sello de trébol" style="--color-sello:#e2f7e2">🍀</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🌈" aria-label="Sello de arcoíris" style="--color-sello:#fff0d9">🌈</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🎈" aria-label="Sello de globo" style="--color-sello:#ffe0e0">🎈</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🍎" aria-label="Sello de manzana" style="--color-sello:#ffdcdc">🍎</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🌙" aria-label="Sello de luna" style="--color-sello:#e6e6ff">🌙</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="⚽" aria-label="Sello de pelota" style="--color-sello:#f0f0f0">⚽</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🎵" aria-label="Sello de nota musical" style="--color-sello:#fde8ff">🎵</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🍦" aria-label="Sello de helado" style="--color-sello:#fff5e0">🍦</button>
+            <button type="button" class="sello-btn" role="radio" aria-checked="false" data-sello="🧸" aria-label="Sello de osito" style="--color-sello:#f3e0d0">🧸</button>
+          </div>
+
+          <button type="button" id="flecha-paleta-der" class="boton-flecha" aria-label="Ver más opciones">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-flecha-der"></use></svg>
+          </button>
+
+          <button type="button" id="tool-eraser" class="boton-secundario-grande">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-goma"></use></svg>
+            <span>Goma</span>
+          </button>
+        </div>
+
+        <div class="fila-creaciones">
+          <span class="etiqueta-fila" aria-hidden="true">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-libro"></use></svg>
+            Mis creaciones
+          </span>
+
+          <div class="tira-miniaturas" id="tira-miniaturas" aria-label="Dibujos guardados recientemente"></div>
+
+          <button type="button" id="btn-nuevo-dibujo" class="boton-texto-chico">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-agregar"></use></svg>
+            <span>Nuevo</span>
+          </button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- PANEL 2: FORMAS (láminas guía, tira horizontal) -->
+    <section id="panel-formas" class="panel-seccion oculto" role="tabpanel" aria-labelledby="nav-formas" hidden>
+      <div class="cabecera-panel-seccion">
+        <h2 class="titulo-panel-seccion">Elegí una lámina para colorear</h2>
+        <div class="flechas-panel-seccion">
+          <button type="button" id="flecha-laminas-izq" class="boton-flecha" aria-label="Ver láminas anteriores">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-flecha-izq"></use></svg>
+          </button>
+          <button type="button" id="flecha-laminas-der" class="boton-flecha" aria-label="Ver más láminas">
+            <svg class="icono-svg" aria-hidden="true"><use href="#icono-flecha-der"></use></svg>
+          </button>
+        </div>
+      </div>
+      <ul class="tira-plantillas" id="tira-plantillas">
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="ninguna" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">✋</span><span>Dibujo libre</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="flor" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🌼</span><span>Flor</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="pez" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🐟</span><span>Pez</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="casa" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🏠</span><span>Casa</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="gato" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🐱</span><span>Gato</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="auto" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🚗</span><span>Auto</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="superheroe" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🦸</span><span>Superhéroe</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="oso" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🐻</span><span>Oso</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="cohete" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🚀</span><span>Cohete</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="mariposa" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🦋</span><span>Mariposa</span></button></li>
+        <li><button type="button" class="tarjeta-plantilla-grande" data-plantilla="arcoiris" aria-pressed="false"><span class="emoji-plantilla" aria-hidden="true">🌈</span><span>Arcoíris</span></button></li>
+      </ul>
+    </section>
+
+    <!-- PANEL 3: DIBUJOS (galería guardada en IndexedDB) -->
+    <section id="panel-dibujos" class="panel-seccion oculto" role="tabpanel" aria-labelledby="nav-dibujos" hidden>
+      <h2 class="titulo-panel-seccion">Mi galería</h2>
+      <p id="galeria-vacia" class="texto-galeria-vacia">Todavía no guardaste ningún dibujo.</p>
+      <ul id="lista-galeria" class="cuadricula-galeria"></ul>
+    </section>
+
+  </main>
+</div>
+
+<template id="plantilla-item-galeria">
+  <li class="item-galeria">
+    <button type="button" class="boton-item-galeria">
+      <img class="miniatura-galeria" alt="">
+      <span class="fecha-galeria"></span>
+    </button>
+    <button type="button" class="boton-borrar-item-galeria" aria-label="Eliminar este dibujo">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-borrar"></use></svg>
+    </button>
+  </li>
+</template>
+
+<template id="plantilla-miniatura-tira">
+  <button type="button" class="miniatura-tira-item">
+    <img class="miniatura-tira-imagen" alt="">
+  </button>
+</template>
+
+<div id="fondo-modal" class="fondo-modal" hidden></div>
+
+<aside id="adult-drawer" class="cajon-acompanante" aria-labelledby="titulo-acompanante" hidden>
+  <div class="cabecera-cajon">
+    <div class="titulo-cajon-grupo">
+      <svg class="icono-svg icono-titulo-cajon" aria-hidden="true"><use href="#icono-escudo"></use></svg>
+      <div>
+        <h2 id="titulo-acompanante">Panel Acompañante</h2>
+        <p>Ajustes sensoriales y terapéuticos</p>
+      </div>
+    </div>
+    <button type="button" id="close-drawer" class="boton-cerrar-cajon" aria-label="Cerrar panel del acompañante">
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-cerrar"></use></svg>
+    </button>
+  </div>
+
+  <div class="cuerpo-cajon">
+    <label class="fila-interruptor">
+      <span class="texto-interruptor">
+        <span>Efectos sonoros</span>
+        <small>Calma acústica sin sobresaltos</small>
+      </span>
+      <input type="checkbox" id="check-silenciar" role="switch" checked>
+    </label>
+
+    <label class="fila-interruptor">
+      <span class="texto-interruptor">
+        <span>Simplificar pantalla</span>
+        <small>Reduce estímulos y botones</small>
+      </span>
+      <input type="checkbox" id="check-modo-simple" role="switch">
+    </label>
+
+    <label class="fila-interruptor">
+      <span class="texto-interruptor">
+        <span>Imán de líneas</span>
+        <small>Corrige temblor o espasticidad</small>
+      </span>
+      <input type="checkbox" id="check-iman-lineas" role="switch" checked>
+    </label>
+
+    <label class="fila-interruptor">
+      <span class="texto-interruptor">
+        <span>Sonido al dibujar</span>
+        <small>Zumbido suave y cálido mientras se traza (opcional)</small>
+      </span>
+      <input type="checkbox" id="check-sonido-dibujo" role="switch">
+    </label>
+
+    <label class="fila-interruptor">
+      <span class="texto-interruptor">
+        <span>Lectura de voz</span>
+        <small>Lee en voz alta el nombre de cada botón al tocarlo</small>
+      </span>
+      <input type="checkbox" id="check-lectura-voz" role="switch">
+    </label>
+
+    <hr class="separador-opciones">
+
+    <button
+      type="button"
+      id="btn-purgar-galeria"
+      class="boton-peligro-ancho"
+      data-hold-ms="2000"
+      aria-label="Vaciar galería local. Mantené presionado dos segundos.">
+      <span class="pista-barra-hold pista-barra-hold-ancha">
+        <span class="pista-barra-hold-relleno" id="purge-progress"></span>
+      </span>
+      <svg class="icono-svg" aria-hidden="true"><use href="#icono-carpeta-borrar"></use></svg>
+      <span>Vaciar galería local</span>
+    </button>
+    <p class="texto-ayuda-acompanante">Mantené presionado para confirmar cada acción destructiva.</p>
+  </div>
+</aside>
+
+<div id="save-toast" class="toast-guardado" role="status" aria-live="polite">
+  <svg class="icono-svg" aria-hidden="true"><use href="#icono-check-circulo"></use></svg>
+  <span>¡Tu dibujo está a salvo! ✨</span>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
