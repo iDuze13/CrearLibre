@@ -1,7 +1,7 @@
 {
   "name": "CrearLibre — Dibujá libre",
   "short_name": "CrearLibre",
-  "description": "Aplicación de dibujo accesible para niños y jóvenes con TEA, síndrome de Down y movilidad reducida.",
+  "description": "Aplicación de dibujo accesible para niños y jóvenes con discapacidad.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
